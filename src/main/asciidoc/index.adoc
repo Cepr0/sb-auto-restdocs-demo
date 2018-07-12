@@ -20,6 +20,17 @@
 Exemplars sunt castors de clemens extum. Cacula, vita, et spatii. Hercle, brabeuta lotus!.
 Consilium, equiso, et zirbus. Armariums tolerare in camerarius avenio!
 
+=== Create user
+
+Vae, abaculus! Est alter lacta, cesaris. Ubi est pius triticum?
+
+==== Request
+include::{user-controller-snippets}/should_create_user/curl-request.adoc[]
+
+==== Responses
+===== `OK`
+include::{user-controller-snippets}/should_create_user/http-response.adoc[]
+
 === Get one user
 
 Lamias sunt brabeutas de clemens abaculus. Resistere nunquam ducunt ad albus accola.
@@ -44,3 +55,31 @@ include::{user-controller-snippets}/should_return_all_users/curl-request.adoc[]
 ==== Responses
 ===== `OK`
 include::{user-controller-snippets}/should_return_all_users/http-response.adoc[]
+
+=== Update user
+
+Audax, camerarius galataes rare talem de gratis, grandis canis? Dexter cotta nunquam prensionems humani generis est.
+
+==== Request
+include::{user-controller-snippets}/should_update_user/curl-request.adoc[]
+
+==== Responses
+===== `OK`
+include::{user-controller-snippets}/should_update_user/http-response.adoc[]
+
+===== `Not Found`
+include::{user-controller-snippets}/should_return_not_found_while_updating_user/http-response.adoc[]
+
+=== Delete user
+
+Buxums accelerare in raptus virundum! Castus, domesticus genetrixs superbe consumere de regius, talis amicitia.
+
+==== Request
+include::{user-controller-snippets}/should_delete_user/curl-request.adoc[]
+
+==== Responses
+===== `OK`
+include::{user-controller-snippets}/should_delete_user/http-response.adoc[]
+
+===== `Not Found`
+include::{user-controller-snippets}/should_return_not_found_while_deleting_user/http-response.adoc[]
