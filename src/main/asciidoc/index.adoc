@@ -1,0 +1,46 @@
+:doctype: book
+:compat-mode:
+:page-layout!:
+:toc: left
+:toc-title: Contents
+:toclevels: 4
+:sectanchors:
+:sectlinks:
+// :sectnums:
+:linkattrs:
+:source-highlighter: highlightjs
+:stylesheet: github.css
+// :linkcss:
+
+:user-controller-snippets: {snippets}/user-controller-test
+
+== Users
+
+[.lead]
+Exemplars sunt castors de clemens extum. Cacula, vita, et spatii. Hercle, brabeuta lotus!.
+Consilium, equiso, et zirbus. Armariums tolerare in camerarius avenio!
+
+=== Get one user
+
+Lamias sunt brabeutas de clemens abaculus. Resistere nunquam ducunt ad albus accola.
+
+==== Request
+include::{user-controller-snippets}/should_return_one_user/curl-request.adoc[]
+
+==== Responses
+===== `OK`
+include::{user-controller-snippets}/should_return_one_user/http-response.adoc[]
+
+===== `Not Found`
+include::{user-controller-snippets}/should_return_not_found/http-response.adoc[]
+
+=== Get all users
+
+Caesium peregrinationess, tanquam domesticus hilotae. Hydra magnum abactus est.
+
+==== Request
+include::{user-controller-snippets}/should_return_all_users/curl-request.adoc[]
+
+==== Responses
+===== `OK`
+include::{user-controller-snippets}/should_return_all_users/http-response.adoc[]

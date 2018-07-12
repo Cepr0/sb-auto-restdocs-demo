@@ -2,10 +2,7 @@ package io.github.cepr0.demo;
 
 import org.springframework.stereotype.Repository;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Repository
@@ -45,7 +42,7 @@ public class UserRepo {
 		return Optional.ofNullable(STORAGE.get(id));
 	}
 	
-	public Collection<User> getAll() {
-		return STORAGE.values();
+	public List<User> getAll() {
+		return new ArrayList<>(STORAGE.values());
 	}
 }
