@@ -1,6 +1,4 @@
 :doctype: book
-:compat-mode:
-:page-layout!:
 :toc: left
 :toc-title: Contents
 :toclevels: 4
@@ -9,7 +7,7 @@
 // :sectnums:
 :linkattrs:
 :source-highlighter: highlightjs
-:stylesheet: github.css
+//:stylesheet: github.css
 // :linkcss:
 
 :user-controller-snippets: {snippets}/user-controller-test
@@ -25,18 +23,33 @@ Consilium, equiso, et zirbus. Armariums tolerare in camerarius avenio!
 Vae, abaculus! Est alter lacta, cesaris. Ubi est pius triticum?
 
 ==== Request
-include::{user-controller-snippets}/should_create_user/curl-request.adoc[]
+include::{user-controller-snippets}/should_create_user/http-request.adoc[]
+
+.Headers
+include::{user-controller-snippets}/should_create_user/request-headers.adoc[]
+
+.Fields
+include::{user-controller-snippets}/should_create_user/request-fields.adoc[]
 
 ==== Responses
 ===== `OK`
 include::{user-controller-snippets}/should_create_user/http-response.adoc[]
+
+.Headers
+include::{user-controller-snippets}/should_create_user/response-headers.adoc[]
+
+.Fields
+include::{user-controller-snippets}/should_create_user/request-fields.adoc[]
+
+.Links
+include::{user-controller-snippets}/should_create_user/links.adoc[]
 
 === Get one user
 
 Lamias sunt brabeutas de clemens abaculus. Resistere nunquam ducunt ad albus accola.
 
 ==== Request
-include::{user-controller-snippets}/should_return_one_user/curl-request.adoc[]
+include::{user-controller-snippets}/should_return_one_user/http-request.adoc[]
 
 ==== Responses
 ===== `OK`
@@ -50,7 +63,7 @@ include::{user-controller-snippets}/should_return_not_found/http-response.adoc[]
 Caesium peregrinationess, tanquam domesticus hilotae. Hydra magnum abactus est.
 
 ==== Request
-include::{user-controller-snippets}/should_return_all_users/curl-request.adoc[]
+include::{user-controller-snippets}/should_return_all_users/http-request.adoc[]
 
 ==== Responses
 ===== `OK`
@@ -61,11 +74,26 @@ include::{user-controller-snippets}/should_return_all_users/http-response.adoc[]
 Audax, camerarius galataes rare talem de gratis, grandis canis? Dexter cotta nunquam prensionems humani generis est.
 
 ==== Request
-include::{user-controller-snippets}/should_update_user/curl-request.adoc[]
+include::{user-controller-snippets}/should_update_user/http-request.adoc[]
+
+.Headers
+include::{user-controller-snippets}/should_update_user/request-headers.adoc[]
+
+.Path parameters
+include::{user-controller-snippets}/should_update_user/path-parameters.adoc[]
+
+.Fields
+include::{user-controller-snippets}/should_update_user/request-fields.adoc[]
 
 ==== Responses
 ===== `OK`
 include::{user-controller-snippets}/should_update_user/http-response.adoc[]
+
+.Fields
+include::{user-controller-snippets}/should_update_user/request-fields.adoc[]
+
+.Links
+include::{user-controller-snippets}/should_update_user/links.adoc[]
 
 ===== `Not Found`
 include::{user-controller-snippets}/should_return_not_found_while_updating_user/http-response.adoc[]
@@ -75,7 +103,10 @@ include::{user-controller-snippets}/should_return_not_found_while_updating_user/
 Buxums accelerare in raptus virundum! Castus, domesticus genetrixs superbe consumere de regius, talis amicitia.
 
 ==== Request
-include::{user-controller-snippets}/should_delete_user/curl-request.adoc[]
+include::{user-controller-snippets}/should_delete_user/http-request.adoc[]
+
+.Path parameters
+include::{user-controller-snippets}/should_delete_user/path-parameters.adoc[]
 
 ==== Responses
 ===== `OK`

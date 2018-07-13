@@ -24,6 +24,7 @@ public class Application {
 	
 	@EventListener
 	public void onReady(ApplicationReadyEvent e) {
-		IntStream.range(0, 10).mapToObj(i -> new User("User" + i, i + 10)).forEach(userRepo::create);
+		// Populate demo data
+		IntStream.range(0, 3).mapToObj(i -> new User("User" + i, i + 10)).forEach(userRepo::create);
 	}
 }

@@ -38,6 +38,10 @@ public class UserRepo {
 		else return 0;
 	}
 	
+	public void deleteAll() {
+		STORAGE.clear();
+	}
+	
 	public Optional<User> get(UUID id) {
 		return Optional.ofNullable(STORAGE.get(id));
 	}
