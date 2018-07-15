@@ -9,6 +9,7 @@ import java.net.URI;
 import java.util.UUID;
 
 import static java.util.stream.Collectors.toList;
+import static org.springframework.hateoas.MediaTypes.HAL_JSON_UTF8_VALUE;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
@@ -20,7 +21,7 @@ public class UserController {
 	
 	private final UserRepo userRepo;
 	
-	@GetMapping
+	@GetMapping(produces = HAL_JSON_UTF8_VALUE)
 	public ResponseEntity getAll() {
 		return ResponseEntity.ok(userRepo.getAll().stream().map(UserResource::new).collect(toList()));
 	}

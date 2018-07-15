@@ -1,3 +1,4 @@
+:backend: html
 :doctype: book
 :toc: left
 :toc-title: Contents
@@ -15,102 +16,74 @@
 == Users
 
 [.lead]
-Exemplars sunt castors de clemens extum. Cacula, vita, et spatii. Hercle, brabeuta lotus!.
-Consilium, equiso, et zirbus. Armariums tolerare in camerarius avenio!
+User related API.
 
-=== Create user
+:request-title: Create user
+:request-description: Creating of a new user.
+:class-name: user-controller-test
+:method-name: should-create-user
+:request-headers: true
+:path-parameters: false
+:request-fields: true
+:response-headers: true
+:response-fields: true
+:links: true
+include::request-template.adoc[]
 
-Vae, abaculus! Est alter lacta, cesaris. Ubi est pius triticum?
-
-==== Request
-include::{user-controller-snippets}/should_create_user/http-request.adoc[]
-
-.Headers
-include::{user-controller-snippets}/should_create_user/request-headers.adoc[]
-
-.Fields
-include::{user-controller-snippets}/should_create_user/request-fields.adoc[]
-
-==== Responses
-===== `OK`
-include::{user-controller-snippets}/should_create_user/http-response.adoc[]
-
-.Headers
-include::{user-controller-snippets}/should_create_user/response-headers.adoc[]
-
-.Fields
-include::{user-controller-snippets}/should_create_user/request-fields.adoc[]
-
-.Links
-include::{user-controller-snippets}/should_create_user/links.adoc[]
-
-=== Get one user
-
-Lamias sunt brabeutas de clemens abaculus. Resistere nunquam ducunt ad albus accola.
-
-==== Request
-include::{user-controller-snippets}/should_return_one_user/http-request.adoc[]
-
-==== Responses
-===== `OK`
-include::{user-controller-snippets}/should_return_one_user/http-response.adoc[]
+:request-title: Get one user
+:request-description: Obtaining one user by the given ID.
+:class-name: user-controller-test
+:method-name: should-return-one-user
+:request-headers: false
+:path-parameters: true
+:request-fields: false
+:response-headers: true
+:response-fields: true
+:links: true
+include::request-template.adoc[]
 
 ===== `Not Found`
-include::{user-controller-snippets}/should_return_not_found/http-response.adoc[]
+include::{user-controller-snippets}/should-return-not-found/http-response.adoc[]
 
-=== Get all users
+:request-title: Get all users
+:request-description: Obtaining a list of all users.
+:class-name: user-controller-test
+:method-name: should-return-all-users
+:request-headers: false
+:path-parameters: false
+:request-fields: false
+:response-headers: true
+:response-fields: true
+:links: false
 
-Caesium peregrinationess, tanquam domesticus hilotae. Hydra magnum abactus est.
+include::request-template.adoc[]
 
-==== Request
-include::{user-controller-snippets}/should_return_all_users/http-request.adoc[]
-
-==== Responses
-===== `OK`
-include::{user-controller-snippets}/should_return_all_users/http-response.adoc[]
-
-=== Update user
-
-Audax, camerarius galataes rare talem de gratis, grandis canis? Dexter cotta nunquam prensionems humani generis est.
-
-==== Request
-include::{user-controller-snippets}/should_update_user/http-request.adoc[]
-
-.Headers
-include::{user-controller-snippets}/should_update_user/request-headers.adoc[]
-
-.Path parameters
-include::{user-controller-snippets}/should_update_user/path-parameters.adoc[]
-
-.Fields
-include::{user-controller-snippets}/should_update_user/request-fields.adoc[]
-
-==== Responses
-===== `OK`
-include::{user-controller-snippets}/should_update_user/http-response.adoc[]
-
-.Fields
-include::{user-controller-snippets}/should_update_user/request-fields.adoc[]
-
-.Links
-include::{user-controller-snippets}/should_update_user/links.adoc[]
+:request-title: Update user
+:request-description: Updating of one user by the given ID.
+:class-name: user-controller-test
+:method-name: should-update-user
+:request-headers: true
+:path-parameters: true
+:request-fields: true
+:response-headers: true
+:response-fields: true
+:links: true
+include::request-template.adoc[]
 
 ===== `Not Found`
-include::{user-controller-snippets}/should_return_not_found_while_updating_user/http-response.adoc[]
+include::{user-controller-snippets}/should-return-not-found-while-updating-user/http-response.adoc[]
 
-=== Delete user
-
-Buxums accelerare in raptus virundum! Castus, domesticus genetrixs superbe consumere de regius, talis amicitia.
-
-==== Request
-include::{user-controller-snippets}/should_delete_user/http-request.adoc[]
-
-.Path parameters
-include::{user-controller-snippets}/should_delete_user/path-parameters.adoc[]
-
-==== Responses
-===== `OK`
-include::{user-controller-snippets}/should_delete_user/http-response.adoc[]
+:request-title: Delete user
+:request-description: Deleting of one user by the given ID.
+:class-name: user-controller-test
+:method-name: should-delete-user
+:request-headers: false
+:path-parameters: true
+:request-fields: false
+:response-headers: false
+:response-fields: false
+:links: false
+include::request-template.adoc[]
 
 ===== `Not Found`
-include::{user-controller-snippets}/should_return_not_found_while_deleting_user/http-response.adoc[]
+include::{user-controller-snippets}/should-return-not-found-while-deleting-user/http-response.adoc[]

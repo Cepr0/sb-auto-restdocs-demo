@@ -31,7 +31,6 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.halLinks;
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.links;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -48,7 +47,8 @@ public class UserControllerTest {
 	private static final String DOCS_PATH = "{class-name}/{method-name}";
 	
 	private static final HeaderDescriptor CONTENT_TYPE_HEADER = headerWithName("Content-Type").description(APPLICATION_JSON_UTF8_VALUE);
-	private static final ParameterDescriptor USER_ID_PARAMETER = parameterWithName("id").description("Id of the user being updated");
+	private static final HeaderDescriptor RESPONSE_CONTENT_TYPE_HEADER = headerWithName("Content-Type").description(HAL_JSON_UTF8_VALUE);
+	private static final ParameterDescriptor USER_ID_PARAMETER = parameterWithName("id").description("The user's ID");
 	private static final FieldDescriptor USER_NAME_FIELD = fieldWithPath("name").description("The user's name");
 	private static final FieldDescriptor USER_AGE_FIELD = fieldWithPath("age").description("The user's age");
 	private static final FieldDescriptor LINKS_FIELD = PayloadDocumentation.subsectionWithPath("_links").description("The user's related links");
@@ -56,6 +56,7 @@ public class UserControllerTest {
 	
 	@Autowired private MockMvc mvc;
 	@Autowired private UserRepo userRepo;
+	@Autowired private RestDocumentationResultHandler docHandler;
 	
 	@Before
 	public void setUp() {
@@ -65,25 +66,44 @@ public class UserControllerTest {
 	}
 	
 	@Test
-	public void should_return_all_users() throws Exception {
-		mvc.perform(get("/users"))
+	public void shouldReturnAllUsers() throws Exception {
+		ResultActions result = mvc.perform(get("/users"))
+				.andExpect(content().contentType(HAL_JSON_UTF8_VALUE))
 				.andExpect(status().isOk());
+
+		result.andDo(docHandler.document(
+				responseFields(
+						PayloadDocumentation.subsectionWithPath("[]")
+							.description("A list of all <<user-controller-test-should-return-one-user-ok-http-response, users>>")
+				),
+				responseHeaders(RESPONSE_CONTENT_TYPE_HEADER)
+		));
 	}
 	
 	@Test
-	public void should_return_one_user() throws Exception {
-		mvc.perform(get("/users/{id}", userRepo.getAll().get(0).getId()))
+	public void shouldReturnOneUser() throws Exception {
+		ResultActions result = mvc.perform(get("/users/{id}", userRepo.getAll().get(0).getId()))
+				.andExpect(content().contentType(HAL_JSON_UTF8_VALUE))
 				.andExpect(status().isOk());
+
+		result.andDo(docHandler.document(
+				pathParameters(USER_ID_PARAMETER),
+				responseFields(USER_NAME_FIELD, USER_AGE_FIELD, LINKS_FIELD),
+				links(halLinks(), SELF_LINK),
+				responseHeaders(RESPONSE_CONTENT_TYPE_HEADER)
+		));
 	}
 	
 	@Test
-	public void should_return_not_found() throws Exception {
-		mvc.perform(get("/users/{id}", UUID.randomUUID()))
+	public void shouldReturnNotFound() throws Exception {
+		ResultActions result = mvc.perform(get("/users/{id}", UUID.randomUUID()))
 				.andExpect(status().isNotFound());
+
+		result.andDo(docHandler.document(pathParameters(USER_ID_PARAMETER)));
 	}
 	
 	@Test
-	public void should_create_user() throws Exception {
+	public void shouldCreateUser() throws Exception {
 		
 		ResultActions result = mvc.perform(post("/users")
 				.content("{\"name\": \"user\",\"age\": 18}")
@@ -91,40 +111,44 @@ public class UserControllerTest {
 				.andExpect(content().contentType(HAL_JSON_UTF8_VALUE))
 				.andExpect(status().isCreated());
 		
-		result.andDo(document(DOCS_PATH,
+		result.andDo(docHandler.document(
 				requestHeaders(CONTENT_TYPE_HEADER),
 				requestFields(USER_NAME_FIELD, USER_AGE_FIELD),
 				responseFields(USER_NAME_FIELD, USER_AGE_FIELD, LINKS_FIELD),
 				links(halLinks(), SELF_LINK),
-				responseHeaders(headerWithName("Location").description("Link to the created user"))
+				responseHeaders(
+						headerWithName("Location").description("Link to the created user"),
+						RESPONSE_CONTENT_TYPE_HEADER
+				)
 		));
 	}
 	
 	@Test
-	public void should_update_user() throws Exception {
+	public void shouldUpdateUser() throws Exception {
 		ResultActions result = mvc.perform(patch("/users/{id}", userRepo.getAll().get(0).getId())
-				.content("{\"name\": \"user_\",\"age\": 20}")
+				.content("{\"name\": \"user\",\"age\": 20}")
 				.contentType(APPLICATION_JSON_UTF8_VALUE))
 				.andExpect(content().contentType(HAL_JSON_UTF8_VALUE))
 				.andExpect(status().isOk());
 		
-		result.andDo(document(DOCS_PATH,
+		result.andDo(docHandler.document(
 				requestHeaders(CONTENT_TYPE_HEADER),
 				pathParameters(USER_ID_PARAMETER),
 				requestFields(USER_NAME_FIELD, USER_AGE_FIELD),
 				responseFields(USER_NAME_FIELD, USER_AGE_FIELD, LINKS_FIELD),
-				links(halLinks(), SELF_LINK)
+				links(halLinks(), SELF_LINK),
+				responseHeaders(RESPONSE_CONTENT_TYPE_HEADER)
 		));
 	}
 	
 	@Test
-	public void should_return_not_found_while_updating_user() throws Exception {
+	public void shouldReturnNotFoundWhileUpdatingUser() throws Exception {
 		ResultActions result = mvc.perform(patch("/users/{id}", UUID.randomUUID())
-				.content("{\"name\": \"user_\",\"age\": 20}")
+				.content("{\"name\": \"user\",\"age\": 20}")
 				.contentType(APPLICATION_JSON_UTF8_VALUE))
 				.andExpect(status().isNotFound());
 		
-		result.andDo(document(DOCS_PATH,
+		result.andDo(docHandler.document(
 				requestHeaders(CONTENT_TYPE_HEADER),
 				pathParameters(USER_ID_PARAMETER),
 				requestFields(USER_NAME_FIELD, USER_AGE_FIELD)
@@ -132,19 +156,19 @@ public class UserControllerTest {
 	}
 	
 	@Test
-	public void should_delete_user() throws Exception {
+	public void shouldDeleteUser() throws Exception {
 		ResultActions result = mvc.perform(delete("/users/{id}", userRepo.getAll().get(0).getId()))
 				.andExpect(status().isNoContent());
 		
-		result.andDo(document(DOCS_PATH, pathParameters(USER_ID_PARAMETER)));
+		result.andDo(docHandler.document(pathParameters(USER_ID_PARAMETER)));
 	}
 	
 	@Test
-	public void should_return_not_found_while_deleting_user() throws Exception {
+	public void shouldReturnNotFoundWhileDeletingUser() throws Exception {
 		ResultActions result = mvc.perform(delete("/users/{id}", UUID.randomUUID()))
 				.andExpect(status().isNotFound());
 		
-		result.andDo(document(DOCS_PATH, pathParameters(USER_ID_PARAMETER)));
+		result.andDo(docHandler.document(pathParameters(USER_ID_PARAMETER)));
 	}
 	
 	@TestConfiguration
