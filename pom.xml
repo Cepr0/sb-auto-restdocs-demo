@@ -66,6 +66,7 @@
             <groupId>capital.scalable</groupId>
             <artifactId>spring-auto-restdocs-core</artifactId>
             <version>${spring-auto-restdocs.version}</version>
+            <scope>test</scope>
         </dependency>
 
     </dependencies>
@@ -88,7 +89,7 @@
                 </configuration>
             </plugin>
 
-            <!-- Asciidoctor - main plugin for REST Docs -->
+            <!-- Build API documentation -->
 
             <plugin>
                 <groupId>org.asciidoctor</groupId>
@@ -123,7 +124,7 @@
                 </dependencies>
             </plugin>
 
-            <!-- Resource plugin - publish API documentation -->
+            <!-- Publish API documentation -->
 
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
@@ -143,29 +144,36 @@
                             </resources>
                         </configuration>
                     </execution>
-
-                    <!--<execution>-->
-                        <!--<id>copy-index-generated-docs</id>-->
-                        <!--<phase>prepare-package</phase>-->
-                        <!--<goals>-->
-                            <!--<goal>copy-resources</goal>-->
-                        <!--</goals>-->
-                        <!--<configuration>-->
-                            <!--<outputDirectory>${project.basedir}/generated-docs</outputDirectory>-->
-                            <!--<resources>-->
-                                <!--<resource>-->
-                                    <!--<directory>${project.build.directory}/generated-docs</directory>-->
-                                    <!--&lt;!&ndash;<includes>&ndash;&gt;-->
-                                        <!--&lt;!&ndash;<include>index.html</include>&ndash;&gt;-->
-                                        <!--&lt;!&ndash;<include>*.css</include>&ndash;&gt;-->
-                                    <!--&lt;!&ndash;</includes>&ndash;&gt;-->
-                                <!--</resource>-->
-                            <!--</resources>-->
-                        <!--</configuration>-->
-                    <!--</execution>-->
                 </executions>
             </plugin>
 
+            <!-- Build Javadoc is used by spring-auto-restdocs -->
+
+            <plugin>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <extensions>true</extensions>
+                <executions>
+                    <execution>
+                        <id>generate-javadoc-json</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>javadoc-no-fork</goal>
+                        </goals>
+                        <configuration>
+                            <doclet>capital.scalable.restdocs.jsondoclet.ExtractDocumentationAsJsonDoclet</doclet>
+                            <docletArtifact>
+                                <groupId>capital.scalable</groupId>
+                                <artifactId>spring-auto-restdocs-json-doclet</artifactId>
+                                <version>${spring-auto-restdocs.version}</version>
+                            </docletArtifact>
+                            <destDir>generated-javadoc-json</destDir>
+                            <reportOutputDirectory>${project.build.directory}</reportOutputDirectory>
+                            <useStandardDocletOptions>false</useStandardDocletOptions>
+                            <show>package</show>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
 
         </plugins>
     </build>

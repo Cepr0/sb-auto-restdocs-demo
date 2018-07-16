@@ -12,7 +12,14 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 @EqualsAndHashCode(callSuper = false)
 @Relation(value = "user", collectionRelation = "users")
 public class UserResource extends ResourceSupport {
+	/**
+	 * User's name
+	 */
 	private String name;
+	
+	/**
+	 * User's age
+	 */
 	private Integer age;
 	
 	public UserResource(User user) {

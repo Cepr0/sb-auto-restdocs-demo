@@ -1,5 +1,7 @@
 package io.github.cepr0.demo;
 
+import capital.scalable.restdocs.AutoDocumentation;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,7 +11,9 @@ import org.springframework.boot.test.autoconfigure.restdocs.RestDocsMockMvcConfi
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.restdocs.cli.CliDocumentation;
 import org.springframework.restdocs.headers.HeaderDescriptor;
+import org.springframework.restdocs.http.HttpDocumentation;
 import org.springframework.restdocs.hypermedia.HypermediaDocumentation;
 import org.springframework.restdocs.hypermedia.LinkDescriptor;
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
@@ -26,33 +30,33 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.util.UUID;
 import java.util.stream.IntStream;
 
+import static capital.scalable.restdocs.response.ResponseModifyingPreprocessors.limitJsonArrayLength;
 import static org.springframework.hateoas.MediaTypes.HAL_JSON_UTF8_VALUE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
-import static org.springframework.restdocs.headers.HeaderDocumentation.*;
-import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.halLinks;
-import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.links;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(UserController.class)
 @AutoConfigureRestDocs(uriScheme = "https", uriHost = "example.com", uriPort = 443)
-public class UserControllerTest {
+public class UserControllerAutoDocsTest {
 
 	private static final String DOCS_PATH = "{class-name}/{method-name}";
 	
 	private static final HeaderDescriptor CONTENT_TYPE_HEADER = headerWithName("Content-Type").description(APPLICATION_JSON_UTF8_VALUE);
 	private static final HeaderDescriptor RESPONSE_CONTENT_TYPE_HEADER = headerWithName("Content-Type").description(HAL_JSON_UTF8_VALUE);
 	private static final ParameterDescriptor USER_ID_PARAMETER = parameterWithName("id").description("The user's ID");
-	private static final FieldDescriptor USER_NAME_FIELD = fieldWithPath("name").description("The user's name");
-	private static final FieldDescriptor USER_AGE_FIELD = fieldWithPath("age").description("The user's age");
+	private static final FieldDescriptor USER_NAME_FIELD = PayloadDocumentation.fieldWithPath("name").description("The user's name");
+	private static final FieldDescriptor USER_AGE_FIELD = PayloadDocumentation.fieldWithPath("age").description("The user's age");
 	private static final FieldDescriptor LINKS_FIELD = PayloadDocumentation.subsectionWithPath("_links").description("The user's related links");
 	private static final LinkDescriptor SELF_LINK = HypermediaDocumentation.linkWithRel("self").description("Self link to the created user");
+	
+	private RestDocumentationResultHandler userResourceResponse;
 	
 	@Autowired private MockMvc mvc;
 	@Autowired private UserRepo userRepo;
@@ -63,6 +67,8 @@ public class UserControllerTest {
 		// Populate test data
 		userRepo.deleteAll();
 		IntStream.range(0, 3).mapToObj(i -> new User("User" + i, i + 10)).forEach(userRepo::create);
+		
+		userResourceResponse = docHandler.document(AutoDocumentation.responseFields().responseBodyAsType(UserResource.class));
 	}
 	
 	@Test
@@ -72,7 +78,7 @@ public class UserControllerTest {
 				.andExpect(status().isOk());
 
 		result.andDo(docHandler.document(
-				responseFields(
+				PayloadDocumentation.responseFields(
 						PayloadDocumentation.subsectionWithPath("[]")
 							.description("A list of all <<user-controller-test-should-return-one-user-ok-http-response, users>>")
 				),
@@ -85,21 +91,14 @@ public class UserControllerTest {
 		ResultActions result = mvc.perform(get("/users/{id}", userRepo.getAll().get(0).getId()))
 				.andExpect(content().contentType(HAL_JSON_UTF8_VALUE))
 				.andExpect(status().isOk());
-
-		result.andDo(docHandler.document(
-				pathParameters(USER_ID_PARAMETER),
-				responseFields(USER_NAME_FIELD, USER_AGE_FIELD, LINKS_FIELD),
-				links(halLinks(), SELF_LINK),
-				responseHeaders(RESPONSE_CONTENT_TYPE_HEADER)
-		));
+		
+		result.andDo(userResourceResponse);
 	}
 	
 	@Test
 	public void shouldReturnNotFound() throws Exception {
 		ResultActions result = mvc.perform(get("/users/{id}", UUID.randomUUID()))
 				.andExpect(status().isNotFound());
-
-		result.andDo(docHandler.document(pathParameters(USER_ID_PARAMETER)));
 	}
 	
 	@Test
@@ -111,16 +110,7 @@ public class UserControllerTest {
 				.andExpect(content().contentType(HAL_JSON_UTF8_VALUE))
 				.andExpect(status().isCreated());
 		
-		result.andDo(docHandler.document(
-				requestHeaders(CONTENT_TYPE_HEADER),
-				requestFields(USER_NAME_FIELD, USER_AGE_FIELD),
-				responseFields(USER_NAME_FIELD, USER_AGE_FIELD, LINKS_FIELD),
-				links(halLinks(), SELF_LINK),
-				responseHeaders(
-						headerWithName("Location").description("Link to the created user"),
-						RESPONSE_CONTENT_TYPE_HEADER
-				)
-		));
+		result.andDo(userResourceResponse);
 	}
 	
 	@Test
@@ -131,14 +121,7 @@ public class UserControllerTest {
 				.andExpect(content().contentType(HAL_JSON_UTF8_VALUE))
 				.andExpect(status().isOk());
 		
-		result.andDo(docHandler.document(
-				requestHeaders(CONTENT_TYPE_HEADER),
-				pathParameters(USER_ID_PARAMETER),
-				requestFields(USER_NAME_FIELD, USER_AGE_FIELD),
-				responseFields(USER_NAME_FIELD, USER_AGE_FIELD, LINKS_FIELD),
-				links(halLinks(), SELF_LINK),
-				responseHeaders(RESPONSE_CONTENT_TYPE_HEADER)
-		));
+		result.andDo(userResourceResponse);
 	}
 	
 	@Test
@@ -147,40 +130,44 @@ public class UserControllerTest {
 				.content("{\"name\": \"user\",\"age\": 20}")
 				.contentType(APPLICATION_JSON_UTF8_VALUE))
 				.andExpect(status().isNotFound());
-		
-		result.andDo(docHandler.document(
-				requestHeaders(CONTENT_TYPE_HEADER),
-				pathParameters(USER_ID_PARAMETER),
-				requestFields(USER_NAME_FIELD, USER_AGE_FIELD)
-		));
 	}
 	
 	@Test
 	public void shouldDeleteUser() throws Exception {
 		ResultActions result = mvc.perform(delete("/users/{id}", userRepo.getAll().get(0).getId()))
 				.andExpect(status().isNoContent());
-		
-		result.andDo(docHandler.document(pathParameters(USER_ID_PARAMETER)));
 	}
 	
 	@Test
 	public void shouldReturnNotFoundWhileDeletingUser() throws Exception {
 		ResultActions result = mvc.perform(delete("/users/{id}", UUID.randomUUID()))
 				.andExpect(status().isNotFound());
-		
-		result.andDo(docHandler.document(pathParameters(USER_ID_PARAMETER)));
 	}
 	
 	@TestConfiguration
 	static class CustomizationConfiguration implements RestDocsMockMvcConfigurationCustomizer {
 		
+		@Autowired private ObjectMapper objectMapper;
+		
 		@Override
 		public void customize(MockMvcRestDocumentationConfigurer configurer) {
 			configurer.operationPreprocessors()
 					.withRequestDefaults(prettyPrint())
-					.withResponseDefaults(prettyPrint())
+					.withResponseDefaults(prettyPrint(), limitJsonArrayLength(objectMapper))
 					.and()
 					.snippets()
+					.withDefaults(
+							CliDocumentation.curlRequest(),
+							HttpDocumentation.httpRequest(),
+							HttpDocumentation.httpResponse(),
+							AutoDocumentation.requestFields(),
+							AutoDocumentation.responseFields(),
+							AutoDocumentation.pathParameters(),
+							AutoDocumentation.requestParameters(),
+							AutoDocumentation.description(),
+							AutoDocumentation.methodAndPath(),
+							AutoDocumentation.section()
+					)
 					.withTemplateFormat(TemplateFormats.asciidoctor());
 		}
 		

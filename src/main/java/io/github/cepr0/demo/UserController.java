@@ -21,11 +21,22 @@ public class UserController {
 	
 	private final UserRepo userRepo;
 	
+	/**
+	 * Returns list of all users.
+	 *
+	 * @title Get all users
+	 */
 	@GetMapping(produces = HAL_JSON_UTF8_VALUE)
 	public ResponseEntity getAll() {
 		return ResponseEntity.ok(userRepo.getAll().stream().map(UserResource::new).collect(toList()));
 	}
 	
+	/**
+	 * Returns the specified user's data.
+	 *
+	 * @param id User's ID
+	 * @title Get one user
+	 */
 	@GetMapping("/{id}")
 	public ResponseEntity get(@PathVariable("id") UUID id) {
 		return userRepo.get(id)
@@ -34,6 +45,11 @@ public class UserController {
 				.orElse(ResponseEntity.notFound().build());
 	}
 	
+	/**
+	 * Creates a new user.
+	 *
+	 * @param userDto a new user's data
+	 */
 	@PostMapping
 	public ResponseEntity create(@RequestBody UserDto userDto) {
 		User user = userRepo.create(userDto.toUser());

@@ -9,7 +9,14 @@ import javax.validation.constraints.NotBlank;
 
 @Value
 public class UserDto {
+	/**
+	 * User's name
+	 */
 	@NotBlank private String name;
+	
+	/**
+	 * User's age
+	 */
 	@NonNull @Min(1) @Max(150) private Integer age;
 	
 	public User toUser() {

@@ -8,7 +8,7 @@
 // :sectnums:
 :linkattrs:
 :source-highlighter: highlightjs
-:stylesheet: github.css
+//:stylesheet: github.css
 :linkcss:
 :docinfo: shared
 
