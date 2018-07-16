@@ -8,8 +8,9 @@
 // :sectnums:
 :linkattrs:
 :source-highlighter: highlightjs
-//:stylesheet: github.css
-// :linkcss:
+:stylesheet: github.css
+:linkcss:
+:docinfo: shared
 
 :user-controller-snippets: {snippets}/user-controller-test
 
