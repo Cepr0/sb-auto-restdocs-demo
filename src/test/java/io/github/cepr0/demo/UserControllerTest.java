@@ -33,9 +33,11 @@ import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.ha
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.links;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.snippet.Attributes.key;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -46,12 +48,16 @@ public class UserControllerTest {
 
 	private static final String DOCS_PATH = "{class-name}/{method-name}";
 	
+	private static final ConstrainedFields USER_CONSTRAINED_FIELDS = new ConstrainedFields(UserDto.class);
+	
 	private static final HeaderDescriptor CONTENT_TYPE_HEADER = headerWithName("Content-Type").description(APPLICATION_JSON_UTF8_VALUE);
 	private static final HeaderDescriptor RESPONSE_CONTENT_TYPE_HEADER = headerWithName("Content-Type").description(HAL_JSON_UTF8_VALUE);
-	private static final ParameterDescriptor USER_ID_PARAMETER = parameterWithName("id").description("The user's ID");
-	private static final FieldDescriptor USER_NAME_FIELD = fieldWithPath("name").description("The user's name");
-	private static final FieldDescriptor USER_AGE_FIELD = fieldWithPath("age").description("The user's age");
+	
+	private static final ParameterDescriptor USER_ID_PARAMETER = parameterWithName("id").attributes(key("type").value("UUID")).description("The user's ID");
+	private static final FieldDescriptor USER_NAME_FIELD = USER_CONSTRAINED_FIELDS.name("name").description("The user's name");
+	private static final FieldDescriptor USER_AGE_FIELD = USER_CONSTRAINED_FIELDS.name("age").description("The user's age");
 	private static final FieldDescriptor LINKS_FIELD = PayloadDocumentation.subsectionWithPath("_links").description("The user's related links");
+
 	private static final LinkDescriptor SELF_LINK = HypermediaDocumentation.linkWithRel("self").description("Self link to the created user");
 	
 	@Autowired private MockMvc mvc;

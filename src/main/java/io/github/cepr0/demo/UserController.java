@@ -48,6 +48,7 @@ public class UserController {
 	/**
 	 * Creates a new user.
 	 *
+	 * @title Create user
 	 * @param userDto a new user's data
 	 */
 	@PostMapping
@@ -57,6 +58,13 @@ public class UserController {
 				.body(new UserResource(user));
 	}
 	
+	/**
+	 * Update existed user by its ID.
+	 *
+	 * @param id User's ID
+	 * @param userDto User's new data
+	 * @title Update user
+	 */
 	@PatchMapping("/{id}")
 	public ResponseEntity update(@PathVariable("id") UUID id, @RequestBody UserDto userDto) {
 		return userRepo.update(id, userDto.toUser())
@@ -65,6 +73,12 @@ public class UserController {
 				.orElse(ResponseEntity.notFound().build());
 	}
 	
+	/**
+	 * Delete existed user by its ID.
+	 *
+	 * @param id User's ID
+	 * @title Delete user
+	 */
 	@DeleteMapping("/{id}")
 	public ResponseEntity delete(@PathVariable("id") UUID id) {
 		if(userRepo.delete(id) == 1) return ResponseEntity.noContent().build();

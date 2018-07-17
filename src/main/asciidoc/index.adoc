@@ -11,9 +11,9 @@
 //:stylesheet: github.css
 :linkcss:
 :docinfo: shared
+:table-caption!:
 
 :user-controller-snippets: {snippets}/user-controller-test
-
 == Users
 
 [.lead]
@@ -29,7 +29,16 @@ User related API.
 :response-headers: true
 :response-fields: true
 :links: true
-include::request-template.adoc[]
+include::_request-template.adoc[]
+
+[.col-right]
+--
+.Request body
+include::{snippets}/{class-name}/{method-name}/request-body.adoc[]
+
+.Response body
+include::{snippets}/{class-name}/{method-name}/response-body.adoc[]
+--
 
 :request-title: Get one user
 :request-description: Obtaining one user by the given ID.
@@ -41,7 +50,13 @@ include::request-template.adoc[]
 :response-headers: true
 :response-fields: true
 :links: true
-include::request-template.adoc[]
+include::_request-template.adoc[]
+
+[.col-right]
+--
+.Response body
+include::{snippets}/{class-name}/{method-name}/response-body.adoc[]
+--
 
 [#{class-name}-{method-name}-not-found-http-response]
 ===== `Not Found`
@@ -57,7 +72,13 @@ include::{user-controller-snippets}/should-return-not-found/http-response.adoc[]
 :response-headers: true
 :response-fields: true
 :links: false
-include::request-template.adoc[]
+include::_request-template.adoc[]
+
+[.col-right]
+--
+.Response body
+include::{snippets}/{class-name}/{method-name}/response-body.adoc[]
+--
 
 :request-title: Update user
 :request-description: Updating of one user by the given ID.
@@ -69,7 +90,16 @@ include::request-template.adoc[]
 :response-headers: true
 :response-fields: true
 :links: true
-include::request-template.adoc[]
+include::_request-template.adoc[]
+
+[.col-right]
+--
+.Request body
+include::{snippets}/{class-name}/{method-name}/request-body.adoc[]
+
+.Response body
+include::{snippets}/{class-name}/{method-name}/response-body.adoc[]
+--
 
 [#{class-name}-{method-name}-not-found-http-response]
 ===== `Not Found`
@@ -85,7 +115,7 @@ include::{user-controller-snippets}/should-return-not-found-while-updating-user/
 :response-headers: false
 :response-fields: false
 :links: false
-include::request-template.adoc[]
+include::_request-template.adoc[]
 
 [#{class-name}-{method-name}-not-found-http-response]
 ===== `Not Found`
