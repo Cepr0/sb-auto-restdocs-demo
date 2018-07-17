@@ -1,0 +1,53 @@
+[#{class-name}-{method-name}-request-title]
+=== {request-title}
+[.request-meta]
+--
+[.request-path]
+include::{snippets}/{class-name}/{method-name}/auto-method-path.adoc[]
+[.request-description]
+include::{snippets}/{class-name}/{method-name}/auto-description.adoc[]
+--
+[#{class-name}-{method-name}-request]
+==== Request
+include::{snippets}/{class-name}/{method-name}/curl-request.adoc[]
+
+ifeval::[{request-headers} == true]
+[#{class-name}-{method-name}-request-headers]
+.Headers
+include::{snippets}/{class-name}/{method-name}/request-headers.adoc[]
+endif::[]
+
+ifeval::[{path-parameters} == true]
+.Path parameters
+include::{snippets}/{class-name}/{method-name}/path-parameters.adoc[]
+endif::[]
+
+ifeval::[{request-fields} == true]
+[#{class-name}-{method-name}-request-fields]
+.Fields
+include::{snippets}/{class-name}/{method-name}/auto-request-fields.adoc[]
+endif::[]
+
+[#{class-name}-{method-name}-responses]
+==== Responses
+[#{class-name}-{method-name}-ok-http-response]
+===== `OK`
+include::{snippets}/{class-name}/{method-name}/http-response.adoc[]
+
+ifeval::[{response-headers} == true]
+[#{class-name}-{method-name}-ok-response-headers]
+.Headers
+include::{snippets}/{class-name}/{method-name}/response-headers.adoc[]
+endif::[]
+
+ifeval::[{response-fields} == true]
+[#{class-name}-{method-name}-ok-response-fields]
+.Fields
+include::{snippets}/{class-name}/{method-name}/auto-response-fields.adoc[]
+endif::[]
+
+//ifeval::[{links} == true]
+//[#{class-name}-{method-name}-ok-links]
+//.Links
+//include::{snippets}/{class-name}/{method-name}/links.adoc[]
+//endif::[]

@@ -1,0 +1,122 @@
+:backend: html
+:doctype: book
+:toc: left
+:toc-title: Contents
+:toclevels: 4
+:sectanchors:
+:sectlinks:
+:sectnums:
+:linkattrs:
+:source-highlighter: highlightjs
+//:stylesheet: github.css
+:linkcss:
+:docinfo: shared
+:table-caption!:
+
+:user-controller-snippets: {snippets}/user-controller-auto-docs-test
+== Users
+
+[.lead]
+User related API.
+
+:request-title: Create user
+:request-description: Creating of a new user.
+:class-name: user-controller-auto-docs-test
+:method-name: should-create-user
+:request-headers: true
+:path-parameters: false
+:request-fields: true
+:response-headers: true
+:response-fields: true
+:links: true
+include::_request-template-auto.adoc[]
+
+[.col-right]
+--
+.Request body
+include::{snippets}/{class-name}/{method-name}/request-body.adoc[]
+
+.Response body
+include::{snippets}/{class-name}/{method-name}/response-body.adoc[]
+--
+
+:request-title: Get one user
+:request-description: Obtaining one user by the given ID.
+:class-name: user-controller-auto-docs-test
+:method-name: should-return-one-user
+:request-headers: false
+:path-parameters: true
+:request-fields: false
+:response-headers: true
+:response-fields: true
+:links: true
+include::_request-template-auto.adoc[]
+
+[.col-right]
+--
+.Response body
+include::{snippets}/{class-name}/{method-name}/response-body.adoc[]
+--
+
+[#{class-name}-{method-name}-not-found-http-response]
+===== `Not Found`
+include::{user-controller-snippets}/should-return-not-found/http-response.adoc[]
+
+:request-title: Get all users
+:request-description: Obtaining a list of all users.
+:class-name: user-controller-auto-docs-test
+:method-name: should-return-all-users
+:request-headers: false
+:path-parameters: false
+:request-fields: false
+:response-headers: true
+:response-fields: true
+:links: false
+include::_request-template-auto.adoc[]
+
+[.col-right]
+--
+.Response body
+include::{snippets}/{class-name}/{method-name}/response-body.adoc[]
+--
+
+:request-title: Update user
+:request-description: Updating of one user by the given ID.
+:class-name: user-controller-auto-docs-test
+:method-name: should-update-user
+:request-headers: true
+:path-parameters: true
+:request-fields: true
+:response-headers: true
+:response-fields: true
+:links: true
+include::_request-template-auto.adoc[]
+
+[.col-right]
+--
+.Request body
+include::{snippets}/{class-name}/{method-name}/request-body.adoc[]
+
+.Response body
+include::{snippets}/{class-name}/{method-name}/response-body.adoc[]
+--
+
+[#{class-name}-{method-name}-not-found-http-response]
+===== `Not Found`
+include::{user-controller-snippets}/should-return-not-found-while-updating-user/http-response.adoc[]
+
+:request-title: Delete user
+:request-description: Deleting of one user by the given ID.
+:class-name: user-controller-auto-docs-test
+:method-name: should-delete-user
+:request-headers: false
+:path-parameters: true
+:request-fields: false
+:response-headers: false
+:response-fields: false
+:links: false
+include::_request-template-auto.adoc[]
+
+[#{class-name}-{method-name}-not-found-http-response]
+===== `Not Found`
+include::{user-controller-snippets}/should-return-not-found-while-deleting-user/http-response.adoc[]
