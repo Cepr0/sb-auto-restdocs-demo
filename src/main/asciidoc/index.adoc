@@ -9,7 +9,7 @@
 :linkattrs:
 :source-highlighter: highlightjs
 //:stylesheet: github.css
-:linkcss:
+//:linkcss:
 :docinfo: shared
 :table-caption!:
 
